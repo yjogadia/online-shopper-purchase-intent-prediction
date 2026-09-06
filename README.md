@@ -1,2 +1,7 @@
-# online-shopper-purchase-intent-prediction
-Binary classification on 12,330 e-commerce sessions to flag high-intent visitors in real time — three tuned models, F1-driven evaluation on an imbalanced target, and SHAP explainability. MSc coursework (M505D), graded 71/100.
+Only about 15% of sessions on a typical e-commerce site end in a purchase. This project predicts, from clickstream behaviour alone, whether a session will convert — the signal a marketing team needs to trigger a discount, a nudge or an exit-intent offer while the visitor is still on the page.
+
+Three classifiers of increasing complexity (Logistic Regression as an interpretable baseline, Random Forest, XGBoost) are trained on 12,330 sessions and tuned with 5-fold stratified RandomizedSearchCV optimised for F1, since accuracy is meaningless against an 84.5% majority class. Class imbalance is handled with balanced class weights and XGBoost's scale_pos_weight. The tuned gradient-boosted model reaches ROC-AUC 0.853, and a SHAP summary plot ranks PageValues, product-page dwell time and visitor type as the dominant drivers — consistent with domain intuition, which is the point of running the explainability step at all.
+
+Submitted for M505D and graded 71/100. The parts that held up were the imbalance-aware evaluation strategy and the SHAP interpretation; reviewing it afterwards, the honest weaknesses are that the two engineered features (EngagementScore, Efficiency) were created after the split and never actually reached the models, and that recall on the purchase class (0.39) is too low to deploy as-is. Threshold tuning and SMOTE are the first two things I would change. I have left the notebook as submitted and documented these in the Limitations section rather than quietly patching them.
+
+**Stack:** Python · scikit-learn · XGBoost · SHAP · pandas · Matplotlib · Seaborn
